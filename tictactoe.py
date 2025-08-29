@@ -5,13 +5,14 @@ class TicTacToe:
 
     def get_children(self):
         children = []
-        if not self.is_terminal():
+        terminal, winner = self.is_terminal()
+        if not terminal:
             for y in range(3):
                 for x in range(3):
                     if self.board[y][x] == 0:
                         child_board = [list(self.board[y]) for y in range(3)]
                         child_board[y][x] = self.to_play
-                        self.children.append(TicTacToe(child_board, 2 if self.to_play == 1 else 1))
+                        children.append(TicTacToe(child_board, 2 if self.to_play == 1 else 1))
         return children
     
     def make_move(self, move):
@@ -72,3 +73,6 @@ class TicTacToe:
             if any_empty:
                 break
         return not any_empty, None
+    
+    def get_hash(self):
+        return str(self.board)
