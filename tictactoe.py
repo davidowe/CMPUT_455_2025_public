@@ -2,6 +2,7 @@ class TicTacToe:
     def __init__(self, init_board = [[0]*3,[0]*3,[0]*3], init_to_play = 1):
         self.to_play = init_to_play
         self.board = init_board
+        self.parent = None
 
     def get_children(self):
         children = []
