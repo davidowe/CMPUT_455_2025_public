@@ -108,14 +108,15 @@ def find_recorded_path(state):
 
 def A_star(start_state, end_state, distance, heuristic):
     prio_queue = [(start_state, 0)]
-    visited = set([start_state])
+    visited = {}
+    visited[start_state] = 0
     while len(prio_queue) > 0:
         state, value = prio_queue.pop()
         if state == end_state:
             return state
         for child in state.children:
-            if child not in visited:
-                visited.add(child)
+            if child not in visited or visited[child] > distance(start_state, child):
+                visited[child] = distance(start_state, child)
                 child.parent = state
                 prio_queue.append((child, distance(start_state, child) \
                                     + heuristic(start_state, end_state)))
