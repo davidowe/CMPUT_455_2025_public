@@ -75,5 +75,5 @@ class TicTacToe:
                 break
         return not any_empty, None
     
-    def get_hash(self):
+    def get_state_key(self):
         return str(self.board)
