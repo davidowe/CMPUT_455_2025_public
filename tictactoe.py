@@ -17,11 +17,11 @@ class TicTacToe:
         return children
     
     def make_move(self, move):
-        self.board[move[0]][move[1]] = self.to_play
+        self.board[move[1]][move[0]] = self.to_play
         self.to_play = 1 if self.to_play == 2 else 2
 
     def undo_move(self, move):
-        self.board[move[0]][move[1]] = 0
+        self.board[move[1]][move[0]] = 0
         self.to_play = 1 if self.to_play == 2 else 2
 
     def get_moves(self):
@@ -77,3 +77,30 @@ class TicTacToe:
     
     def get_state_key(self):
         return str(self.board)
+    
+    def get_fixed_score(self):
+        terminal, winner = self.is_terminal()
+        if terminal:
+            if winner is None:
+                return 0
+            elif winner == 1:
+                return 1
+            else:
+                return -1
+        else:
+            return None
+        
+    def get_relative_score(self):
+        terminal, winner = self.is_terminal()
+        if terminal:
+            if winner is None:
+                return 0
+            elif winner == self.to_play:
+                return 1
+            else:
+                return -1
+        else:
+            return None
+        
+    def get_player(self):
+        return self.to_play
