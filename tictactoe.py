@@ -3,6 +3,8 @@ class TicTacToe:
         self.to_play = init_to_play
         self.board = init_board
         self.parent = None
+        self.width = 3
+        self.height = 3
 
     def get_children(self):
         children = []
