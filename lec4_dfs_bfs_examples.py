@@ -6,8 +6,8 @@ def dfs_state(start_state, goal):
     visited = set()
     while len(stack) > 0:
         state = stack.pop()
-        if state.get_hash() not in visited:
-            visited.add(state.get_hash())
+        if state.get_state_key() not in visited:
+            visited.add(state.get_state_key())
             if goal(state):
                 print("Visited:", len(visited))
                 return state
@@ -16,11 +16,11 @@ def dfs_state(start_state, goal):
     return None
 
 def dfs_recursive(state, visited, goal):
-    visited.add(state.get_hash())
+    visited.add(state.get_state_key())
     if goal(state):
         return state
     for child in state.get_children():
-        if child.get_hash() not in visited:
+        if child.get_state_key not in visited:
             found_state = dfs_recursive(child, visited, goal)
             if found_state is not None:
                 return found_state
@@ -41,23 +41,23 @@ def dfs_move_undo(state, goal):
     return None
 
 def dfs_general(state, visited, goal):
-    visited.add(state.get_hash())
+    visited.add(state.get_state_key())
     if goal(visited):
         return visited
     for child in state.get_children():
-        if child.get_hash() not in visited:
+        if child.get_state_key not in visited:
             found_visited = dfs_general(child, visited, goal)
             if found_visited is not None:
                 return found_visited
     return None
 
 def dfs_path(path, visited, goal):
-    visited.add(tuple([state.get_hash() for state in path]))
+    visited.add(tuple([state.get_state_key() for state in path]))
     if goal(path):
         return path
     for child in path[-1].get_children():
         child_path = path + [child]
-        if tuple([state.get_hash() for state in child_path]) not in visited:
+        if tuple([state.get_state_key() for state in child_path]) not in visited:
             found_path = dfs_path(child_path, visited, goal)
             if found_path is not None:
                 return found_path
@@ -65,25 +65,25 @@ def dfs_path(path, visited, goal):
 
 
 def dfs_path_to_end(path, visited, end):
-    visited.add(tuple([state.get_hash() for state in path]))
+    visited.add(tuple([state.get_state_key() for state in path]))
     if path[-1].board == end:
         return path
     for child in path[-1].get_children():
         child_path = path + [child]
-        if tuple([state.get_hash() for state in child_path]) not in visited:
+        if tuple([state.get_state_key() for state in child_path]) not in visited:
             found_path = dfs_path_to_end(child_path, visited, end)
             if found_path is not None:
                 return found_path
     return None
 
 def dfs_heuristic(path, visited, end, heuristic):
-    visited.add(tuple([state.get_hash() for state in path]))
+    visited.add(tuple([state.get_state_key() for state in path]))
     if path[-1].board == end:
         return path
     ranked_children = sorted(path[-1].get_children(), key=heuristic)
     for child in ranked_children:
         child_path = path + [child]
-        if tuple([state.get_hash() for state in child_path]) not in visited:
+        if tuple([state.get_state_key() for state in child_path]) not in visited:
             found_path = dfs_heuristic(child_path, visited, end, heuristic)
             if found_path is not None:
                 return found_path
@@ -94,11 +94,11 @@ def bfs_state(start_state, goal):
     visited = set()
     while len(queue) > 0:
         state = queue.pop()
-        if state.get_hash() not in visited:
+        if state.get_state_key() not in visited:
             if goal(state):
                 print("Visited:", len(visited))
                 return state
-            visited.add(state.get_hash())
+            visited.add(state.get_state_key())
             queue = state.get_children() + queue
     print("Visited:", len(visited))
     return None
@@ -112,8 +112,8 @@ def bfs_path(start_state, goal):
             print("Visited:", len(visited))
             return state
         for child in state.get_children():
-            if child.get_hash() not in visited:
-                visited.add(child.get_hash())
+            if child.get_state_key not in visited:
+                visited.add(child.get_state_key)
                 child.parent = state
                 queue.insert(0, child)
     print("Visited:", len(visited))
@@ -131,7 +131,7 @@ def A_star(start_state, end_state, heuristic):
     start_state.dist_from_start = 0
     prio_queue = [(start_state, 0)]
     visited = {}
-    visited[start_state.get_hash()] = 0
+    visited[start_state.get_state_key()] = 0
     while len(prio_queue) > 0:
         state, value = prio_queue.pop()
         if state.board == end_state:
@@ -139,9 +139,9 @@ def A_star(start_state, end_state, heuristic):
             return state
         for child in state.get_children():
             child.dist_from_start = state.dist_from_start + 1
-            if child.get_hash() not in visited \
-            or visited[child.get_hash()] > child.dist_from_start:
-                visited[child.get_hash()] = child.dist_from_start
+            if child.get_state_key not in visited \
+            or visited[child.get_state_key] > child.dist_from_start:
+                visited[child.get_state_key] = child.dist_from_start
                 child.parent = state
                 prio_queue.append((child, child.dist_from_start \
                                     + heuristic(start_state, end_state)))
