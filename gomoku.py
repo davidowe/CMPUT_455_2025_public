@@ -86,6 +86,50 @@ class Gomoku:
                 break
         return not any_empty, 2
     
+    def is_terminal_relative_score(self):
+        for piece in [1, 2]:
+            terminal_score = 1 if piece == self.to_play else -1
+            for y in range(self.height):
+                for x in range(self.width):
+                    #Horizontal lines
+                    count = 0
+                    for x1 in range(x, self.width):
+                        if self.board[y][x1] == piece:
+                            count += 1
+                    if count >= self.winning_length:
+                        return True, terminal_score
+                    #Vertical lines
+                    count = 0
+                    for y1 in range(y, self.height):
+                        if self.board[y1][x] == piece:
+                            count += 1
+                    if count >= self.winning_length:
+                        return True, terminal_score
+                    #Diagonal lines
+                    count = 0
+                    for d_offset in range(0, min(self.height-y,self.width-x)):
+                        if self.board[y+d_offset][x+d_offset] == piece:
+                            count += 1
+                    if count >= self.winning_length:
+                        return True, terminal_score
+                    #Anti-diagonal lines
+                    count = 0
+                    for ad_offset in range(0, min(y+1,self.width-x)):
+                        if self.board[y-ad_offset][x+ad_offset] == piece:
+                            count += 1
+                    if count >= self.winning_length:
+                        return True, terminal_score
+        #Check for draw
+        any_empty = False
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.board[y][x] == 0:
+                    any_empty = True
+                    break
+            if any_empty:
+                break
+        return not any_empty, 0
+    
     def get_state_key(self):
         return str(self.board)
     
