@@ -145,20 +145,20 @@ def one_roll(n, turn_score):
 def always_roll(n, turn_score):
     return True
 
-#dice = [1]*6
-#tt = {}
-#print("\nExpected value of a turn using the one roll policy:")
-#print(compute_over_all_rolls_policy(dice, 0, 0, one_roll, tt))
+dice = [1]*6
+tt = {}
+print("\nExpected value of a turn using the one roll policy:")
+print(compute_over_all_rolls_policy(dice, 0, 0, one_roll, tt))
 
-#dice = [1]*6
-#tt = {}
-#print("\nExpected value of a turn using the always roll policy:")
-#print(compute_over_all_rolls_policy(dice, 0, 0, always_roll, tt))
+dice = [1]*6
+tt = {}
+print("\nExpected value of a turn using the always roll policy:")
+print(compute_over_all_rolls_policy(dice, 0, 0, always_roll, tt))
 
-#dice = [1]*6
-#tt = {}
-#print("\nExpected value of a turn using the positive roll EV policy:")
-#print(compute_over_all_rolls_policy(dice, 0, 0, positive_EV_policy, tt))
+dice = [1]*6
+tt = {}
+print("\nExpected value of a turn using the positive roll EV policy:")
+print(compute_over_all_rolls_policy(dice, 0, 0, positive_EV_policy, tt))
 
 dice = [1]*6
 tt = {}
