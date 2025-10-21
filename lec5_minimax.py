@@ -106,3 +106,39 @@ ttt = TicTacToe()
 print("\nBoolean negamax with cutoffs to determine if p1 can always win or draw:")
 print(boolean_negamax_cutoffs(ttt, p2_must_win))
 print("Took", round(time.time() - t0,2), "seconds")
+
+
+
+
+
+
+def f1(state):
+    terminal, winner = state.is_terminal()
+    if terminal:
+        return winner == state.to_play
+    can_win = False
+    for child in state.get_children():
+        child_result = not f1(child)
+        can_win = child_result or can_win
+    return can_win
+
+def f2(state):
+    terminal, winner = state.is_terminal()
+    if terminal:
+        return winner == state.to_play
+    for child in state.get_children():
+        child_result = not f2(child)
+        if child_result:
+            return True
+    return False
+
+
+def foo(state, max_player, heuristic_ME):
+    children = state.get_children()
+    if len(children) == 0:
+        return state.get_fixed_score()
+    ordered_children = sorted(children, key=lambda x: heuristic_ME(x))
+    if state.get_player() == max_player:
+        return max([foo(child, max_player, heuristic_ME) for child in ordered_children])
+    else:
+        return min([foo(child, max_player, heuristic_ME) for child in ordered_children])

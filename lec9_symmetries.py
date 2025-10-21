@@ -12,36 +12,43 @@ def generate_symmetric_state_about_vertical(state, sym_state):
     for y in range(state.height):
         for x in range(state.width):
             sym_state.board[y][x] = state.board[y][state.width-1-x]
+    sym_state.to_play = state.to_play
 
 def generate_symmetric_state_about_horizontal(state, sym_state):
     for y in range(state.height):
         for x in range(state.width):
             sym_state.board[y][x] = state.board[state.height-1-y][x]
+    sym_state.to_play = state.to_play
 
 def generate_symmetric_state_about_diagonal(state, sym_state):
     for y in range(state.height):
         for x in range(state.width):
             sym_state.board[y][x] = state.board[x][y]
+    sym_state.to_play = state.to_play
 
 def generate_symmetric_state_about_anti_diagonal(state, sym_state):
     for y in range(state.height):
         for x in range(state.width):
             sym_state.board[y][x] = state.board[state.width-1-x][state.height-1-y]
+    sym_state.to_play = state.to_play
 
 def generate_symmetric_state_about_90_rotation(state, sym_state):
     for y in range(state.height):
         for x in range(state.width):
             sym_state.board[y][x] = state.board[state.height-1-x][y]
+    sym_state.to_play = state.to_play
     
 def generate_symmetric_state_about_180_rotation(state, sym_state):
     for y in range(state.height):
         for x in range(state.width):
             sym_state.board[y][x] = state.board[state.height-1-y][state.width-1-x]
+    sym_state.to_play = state.to_play
 
 def generate_symmetric_state_about_270_rotation(state, sym_state):
     for y in range(state.height):
         for x in range(state.width):
             sym_state.board[y][x] = state.board[x][state.height-1-y]
+    sym_state.to_play = state.to_play
 
 ttt = TicTacToe([[2,0,1],[1,0,0],[0,2,1]],2)
 ttt_symm = TicTacToe()
