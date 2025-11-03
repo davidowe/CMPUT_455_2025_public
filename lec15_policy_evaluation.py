@@ -1,5 +1,4 @@
 import random
-import signal
 import time
 
 score_tt = {}
@@ -203,7 +202,7 @@ def tournament(policies, labels, num_samples=10000):
             print("_"*len(results[i]*6))
     return results
 
-tournament([random_policy, greedy_policy, probabilistic_policy_corner, probabilistic_policy_edge], ["random", "greedy", "corner", "edge"])
+#tournament([random_policy, greedy_policy, probabilistic_policy_corner, probabilistic_policy_edge], ["random", "greedy", "corner", "edge"])
 
 def flat_mc(state, turn_time_budget=0.1):
     t0 = time.time()
@@ -235,5 +234,32 @@ def flat_mc(state, turn_time_budget=0.1):
             max_i = i
     return moves[max_i]
 
-test_matchup("Random", random_policy, "Flat MC", flat_mc, epsilon=0, num_samples=100)
-test_matchup("Prob. corner", probabilistic_policy_corner, "Flat MC", flat_mc, epsilon=0, num_samples=100)
+tt = {}
+def negamax_alpha_beta(state, alpha, beta):
+    global tt
+    state_key = state.get_state_key()
+    score = state.get_relative_score()
+    if score is not None:
+        tt[state_key] = (score, None)
+        return score, None
+    value = -float('inf')
+    best_move = None
+    for move in state.get_moves():
+        state.make_move(move)
+        child_value, child_move = negamax_alpha_beta(state, -beta, -alpha)
+        if -child_value > value:
+            best_move = move
+        value = max(value, -child_value)
+        alpha = max(alpha, value)
+        state.undo_move(move)
+        if alpha >= beta:
+            tt[state_key] = (value, best_move)
+            return value, best_move
+    tt[state_key] = (value, best_move)
+    return value, best_move
+
+def perfect_policy(state):
+    val, move = negamax_alpha_beta(state, -1, 1)
+    return move
+
+test_matchup("Random", random_policy, "Perfect", perfect_policy, epsilon=0, num_samples=1000)

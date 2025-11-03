@@ -106,3 +106,9 @@ class TicTacToe:
         
     def get_player(self):
         return self.to_play
+    
+    def get_copy(self):
+        board_copy = []
+        for i in range(3):
+            board_copy.append(list(self.board[i]))
+        return TicTacToe(board_copy, self.to_play)
