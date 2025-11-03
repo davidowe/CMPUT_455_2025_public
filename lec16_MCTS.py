@@ -27,7 +27,8 @@ def UCB_selection(node, c=1):
     for i, child in enumerate(node.children):
         if child.visits == 0:
             return node.children[i]
-        ucb_i = -child.score_total/child.visits+c*math.sqrt(math.log(node.visits)/child.visits)
+        ucb_i = -child.score_total/child.visits+\
+            c*math.sqrt(math.log(node.visits)/child.visits)
         if ucb_i > max_ucb:
             max_ucb = ucb_i
             max_i = i
@@ -42,7 +43,6 @@ def expansion(node):
         node.state.make_move(move)
         node.children.append(MCTS_node(node.state))
         node.state.undo_move(move)
-
     # Simulation:
     child = UCB_selection(node)
     child.score_total += random_walk(child.state)
@@ -54,6 +54,7 @@ def selection(node):
         score = -expansion(node)
     else:
         score = -selection(UCB_selection(node))
+    # Backpropagation
     node.score_total += score
     node.visits += 1
     return score
