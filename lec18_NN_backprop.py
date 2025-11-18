@@ -67,14 +67,14 @@ class NeuralNetwork:
         b_err = [np.zeros(self.b[l].shape) for l in range(len(self.b))]
         for x, y in data_points:
             output, b_prime, W_prime = self.backpropagate(x)
-            err = (-2)*((y - output)[0])
+            err = (-2)/len(data_points)*((y - output)[0])
             for l in range(len(self.W)):
                 b_err[l] += err * b_prime[l]
                 W_err[l] += err * W_prime[l]
                 
         for l in range(len(self.W)):
-            self.W[l] = self.W[l] - self.learning_rate * W_err[l] / len(data_points)
-            self.b[l] = self.b[l] - self.learning_rate * b_err[l] / len(data_points)
+            self.W[l] = self.W[l] - self.learning_rate * W_err[l] 
+            self.b[l] = self.b[l] - self.learning_rate * b_err[l]
 
 def hidden_func(x):
     return  3*math.cos(1+0.5*x)*(math.sin(x)-0.25)**2+np.random.normal(loc=0)
