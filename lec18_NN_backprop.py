@@ -24,8 +24,8 @@ class NeuralNetwork:
             self.W.append(np.array(np.random.normal(loc=0, size=(layers_sizes[i], layers_sizes[i-1]))))
             self.b.append(np.array(np.random.normal(loc=0, size=(layers_sizes[i]))))
             if i == len(layers_sizes)-1:
-                self.g.append(np.vectorize(ReLU))
-                self.g_prime.append(np.vectorize(ReLU_prime))
+                self.g.append(np.vectorize(identity))
+                self.g_prime.append(np.vectorize(identity_prime))
             else:
                 self.g.append(np.vectorize(ReLU))
                 self.g_prime.append(np.vectorize(ReLU_prime))
@@ -67,14 +67,14 @@ class NeuralNetwork:
         b_err = [np.zeros(self.b[l].shape) for l in range(len(self.b))]
         for x, y in data_points:
             output, b_prime, W_prime = self.backpropagate(x)
-            err = (y - output)[0]
+            err = (-2)*((y - output)[0])
             for l in range(len(self.W)):
                 b_err[l] += err * b_prime[l]
                 W_err[l] += err * W_prime[l]
                 
         for l in range(len(self.W)):
-            self.W[l] = self.W[l] + self.learning_rate * W_err[l] / len(data_points)
-            self.b[l] = self.b[l] + self.learning_rate * b_err[l] / len(data_points)
+            self.W[l] = self.W[l] - self.learning_rate * W_err[l] / len(data_points)
+            self.b[l] = self.b[l] - self.learning_rate * b_err[l] / len(data_points)
 
 def hidden_func(x):
     return  3*math.cos(1+0.5*x)*(math.sin(x)-0.25)**2+np.random.normal(loc=0)
