@@ -2,10 +2,16 @@ import numpy as np
 import math
 
 def ReLU(x):
-    return x if x > 0 else 0.1*x
+    return x if x > 0 else x*0.1
 
 def ReLU_prime(x):
     return 1 if x > 0 else 0.1
+
+def identity(x):
+    return x
+
+def identity_prime(x):
+    return 1
 
 class NeuralNetwork:
     def __init__(self, layers_sizes, learning_rate=0.1):
@@ -17,8 +23,12 @@ class NeuralNetwork:
         for i in range(1, len(layers_sizes)):
             self.W.append(np.array(np.random.normal(loc=0, size=(layers_sizes[i], layers_sizes[i-1]))))
             self.b.append(np.array(np.random.normal(loc=0, size=(layers_sizes[i]))))
-            self.g.append(np.vectorize(ReLU))
-            self.g_prime.append(np.vectorize(ReLU_prime))
+            if i == len(layers_sizes)-1:
+                self.g.append(np.vectorize(ReLU))
+                self.g_prime.append(np.vectorize(ReLU_prime))
+            else:
+                self.g.append(np.vectorize(ReLU))
+                self.g_prime.append(np.vectorize(ReLU_prime))
 
     #returns output, bias derivaties, and weight derivatives
     def backpropagate(self, x):
@@ -71,7 +81,7 @@ def hidden_func(x):
 
 def generate_data(num_samples):
     data_points = []
-    for i in num_samples:
+    for i in range(num_samples):
         x = np.random.normal()
         y = hidden_func(x)
         data_points.append((np.array([x]), np.array([y])))
@@ -84,9 +94,10 @@ mse_list = []
 num_steps = 200
 for i in range(num_steps):
     nn.gradient_descent(training_data_points)
-    mse_list.append(nn.mean_squared_error(testing_data_points))
+    mse = nn.mean_squared_error(testing_data_points)
+    mse_list.append(mse)
+    print("MSE:", mse)
 
-    #print("MSE:", mse)
 import matplotlib.pyplot as plt
 
 bg_color = (250/255, 245/255, 235/255)
